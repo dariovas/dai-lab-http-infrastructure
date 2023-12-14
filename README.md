@@ -17,3 +17,11 @@ The nginx.conf defines :
 - Location of the website content to display
 - Default page 
 - Custom error pages
+
+## Docker Compose 
+The docker compose file will be used to generate our infrastructure.
+
+The compose.yaml defines :
+- The static web server to build
+- On which port
+
