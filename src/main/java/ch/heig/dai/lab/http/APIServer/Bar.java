@@ -17,7 +17,7 @@ public class Bar {
         this.name = name;
         this.city = city;
         this.capacity = capacity;
-        this.cocktails = cocktails;
+        this.cocktails = new ArrayList<String> (cocktails);
     }
 
     public int getId(){
@@ -53,5 +53,9 @@ public class Bar {
 
     public void addCocktail(String name){
         cocktails.add(name);
+    }
+
+    public void removeCocktail(String name){
+        cocktails.remove(name);
     }
 }

@@ -27,42 +27,68 @@ public class BarController {
         bars.put(++lastId, new Bar(lastId, "Good Time", "Biel/Bienne", 230, cocktails));
     }
 
+    private Bar findBarById(Context ctx){
+        int id = Integer.parseInt(ctx.pathParam("id"));
+        Bar bar = bars.get(id);
+
+        if (bar == null) {
+            ctx.status(404).result("Bar not found");
+        }
+        return bar;
+    }
+
     public void getAll(Context ctx) {
         ctx.json(bars);
     }
 
     public void getOne(Context ctx) {
-        int id = Integer.parseInt(ctx.pathParam("id"));
-        Bar bar = bars.get(id);
+        Bar bar = findBarById(ctx);
+
         if (bar != null) {
             ctx.json(bar);
-        } else {
-            ctx.status(404).result("Bar not found");
         }
     }
 
     public void getBarCocktails(Context ctx){
-        int id = Integer.parseInt(ctx.pathParam("id"));
-        Bar bar = bars.get(id);
-
+        Bar bar = findBarById(ctx);
         if (bar != null) {
             ctx.json(bar.getCocktails());
-        } else {
-            ctx.status(404).result("Bar not found");
         }
     }
 
-    public void addBarCocktails(Context ctx){
-        int id = Integer.parseInt(ctx.pathParam("id"));
-        String cocktailName = ctx.formParam("cocktailName");
+    private void modifyBarCocktails(Context ctx, boolean isAdding){
+        Bar bar = findBarById(ctx);
 
-        Bar bar = bars.get(id);
-        if (bar != null) {
-            bar.addCocktail(cocktailName);
+        if(bar != null){
+            String cocktailName = ctx.formParam("cocktailName");
+            boolean cocktailExists = bar.getCocktails().contains(cocktailName);
+
+            if (isAdding && cocktailExists) {
+                ctx.status(400).result("Cocktail already exists in this bar.");
+                return;
+            } else if (!isAdding && !cocktailExists) {
+                ctx.status(400).result("Cocktail doesn't exist in this bar.");
+                return;
+            }
+
+            if(isAdding){
+                bar.addCocktail(cocktailName);
+            }
+            else {
+                bar.removeCocktail(cocktailName);
+            }
+
             ctx.json(bar.getCocktails());
-        } else {
-            ctx.status(404).result("Bar not found");
         }
+
+    }
+
+    public void addBarCocktails(Context ctx){
+        modifyBarCocktails(ctx, true);
+    }
+
+    public void removeBarCocktails(Context ctx){
+        modifyBarCocktails(ctx, false);
     }
 
     public void create(Context ctx) {
