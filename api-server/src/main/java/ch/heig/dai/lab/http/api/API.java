@@ -1,4 +1,4 @@
-package ch.heig.dai.lab.http.APIServer;
+package ch.heig.dai.lab.http.api;
 
 import io.javalin.*;
 
