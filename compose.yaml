@@ -1,8 +1,13 @@
 version: '3'
 
 services:
-  web:
+  static-web-server:
     build: staticWebServer
     container_name: http-static-web-server
     ports:
-      - "8080:80"
+      - "80:80"
+  api-server:
+    build: api-server
+    container_name: api-server
+    ports:
+      - "7001:7001"
