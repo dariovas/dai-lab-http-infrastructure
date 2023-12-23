@@ -53,7 +53,7 @@ docker compose down
 An HTTP API Server to handle and manage different bars has been implemented.
 
 It can be acceded on this URL :
-http://localhost:7001/api/bars
+http://localhost/api/bars
 
 All configuration files can be found in the folder [api-server](./api-server).
 
