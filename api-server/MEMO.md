@@ -18,35 +18,35 @@ curl -X POST -H "Content-Type: application/json" -d '{"name": "Bar 1", "city": "
 ### POST /api/bars/{id}/cocktails/add
 To add a cocktail to a bar, you need to specify its id and the cocktailName entry like the example below :
 ```
-curl -X POST http://localhost:7001/api/bars/1/add -d "cocktailName=Spritz"
+curl -X POST http://localhost:7001/api/bars/1/cocktails/add -d "cocktailName=Spritz"
 ```
 
 ## Read operations
 ### GET /api/bars
 To get all bars, you can access through the browser :
-http://localhost/api/bars
+http://localhost:7001/api/bars
 
 Or, simply runs the following command :
 ```
-curl -X GET http://localhost/api/bars
+curl -X GET http://localhost:7001/api/bars
 ```
 
 ### GET /api/bars/{id}
 To get a specific bar identified by its id, you can access through the browser :
-http://localhost/api/bars/1
+http://localhost:7001/api/bars/1
 
 Or, simply runs the following command :
 ```
-curl -X GET http://localhost/api/bars/1
+curl -X GET http://localhost:7001/api/bars/1
 ```
 
 ### GET /api/bars/{id}/cocktails
 To get the cocktails list of a specific bar identified by its id, you can access through the browser :
-http://localhost/api/bars/1/cocktails/
+http://localhost:7001/api/bars/1/cocktails/
 
 Or, simply runs the following command :
 ```
-curl -X GET http://localhost/api/bars/1/cocktails
+curl -X GET http://localhost:7001/api/bars/1/cocktails
 ```
 
 ## Update operation
@@ -65,11 +65,11 @@ curl -X PUT -H "Content-Type: application/json" -d '{"name": "Bar 1", "city": "Y
 ### DELETE /api/bars/{id}
 To delete a specific bar, you need to specify its id like the example below :
 ```
-curl -X DELETE http://localhost/api/bars/1
+curl -X DELETE http://localhost:7001/api/bars/1
 ```
 
 ### DELETE /api/bars/{id}/cocktails/del
 To delete a cocktail from a bar, you need to specify its id and the cocktailName entry like the example below :
 ```
-curl -X DELETE http://localhost:7001/api/bars/1/del -d "cocktailName=Spritz"
+curl -X DELETE http://localhost:7001/api/bars/1/cocktails/del -d "cocktailName=Spritz"
 ```
