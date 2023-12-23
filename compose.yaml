@@ -3,11 +3,52 @@ version: '3'
 services:
   static-web-server:
     build: staticWebServer
-    container_name: http-static-web-server
-    ports:
-      - "80:80"
+    container_name: static-web-server
+    expose:
+      - "80"
+    volumes:
+      - ./staticWebServer/config/log:/var/log/nginx
+    labels:
+      # Explicitly tell traefik to expose this container.
+      - "traefik.enable=true"
+      # Defines the domain on which the service responds.
+      - "traefik.http.routers.static-router.rule=Host(`localhost`)"
+      # Defines the entrypoint on which the router listens.
+      - "traefik.http.routers.static-router.entrypoints=web"
+      # Routes all requests to the service static-router.
+      - "traefik.http.routers.static-router.service=static-router"
+      # Defines the port on which the service responds.
+      - "traefik.http.services.static-router.loadbalancer.server.port=80"
   api-server:
     build: api-server
     container_name: api-server
+    expose:
+      - "80"
+    labels:
+      # Explicitly tell traefik to expose this container.
+      - "traefik.enable=true"
+      # Defines the path prefixed domain on which the service responds.
+      - "traefik.http.routers.api-router.rule=PathPrefix(`/api/`)"
+      # Routes all requests to the service api-router
+      - "traefik.http.routers.api-router.service=api-router"
+      # Defines the port on which the service responds.
+      - "traefik.http.services.api-router.loadbalancer.server.port=80"
+  reverse_proxy:
+    container_name: reverse_proxy
+    image: traefik
+    command:
+      # Enables the web UI and tells Traefik to listen to docker
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      # Do not expose containers unless explicitly told so
+      - "--providers.docker.exposedbydefault=false"
+      # Defines address "web" on port 80
+      - "--entrypoints.web.address=:80"
     ports:
-      - "7001:7001"
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock

@@ -5,7 +5,7 @@ import io.javalin.*;
 public class Server {
 
     public static void main(String[] args) {
-        Javalin app = Javalin.create().start(7001);
+        Javalin app = Javalin.create().start(80);
 
         BarController barController = new BarController();
 
