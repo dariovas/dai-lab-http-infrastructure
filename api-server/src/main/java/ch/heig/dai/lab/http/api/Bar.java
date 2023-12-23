@@ -51,6 +51,14 @@ public class Bar {
         return cocktails;
     }
 
+    public void setCocktails(List<String> cocktails){
+        if(cocktails == null){
+            throw new RuntimeException("The cocktails list is empty.");
+        }
+
+        this.cocktails = new ArrayList<>(cocktails);
+    }
+
     public void addCocktail(String name){
         cocktails.add(name);
     }

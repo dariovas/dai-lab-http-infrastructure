@@ -9,7 +9,7 @@ COPY pom.xml /app
 COPY src /app/src
 
 # Compilation de l'application avec Maven
-RUN mvn -B -DskipTests clean package
+RUN mvn -B clean package
 
 # Utilisation d'une image plus légère pour exécuter l'application
 FROM alpine:latest

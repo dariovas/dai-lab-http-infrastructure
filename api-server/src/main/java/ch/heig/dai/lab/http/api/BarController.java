@@ -27,6 +27,11 @@ public class BarController {
         bars.put(++lastId, new Bar(lastId, "Good Time", "Biel/Bienne", 230, cocktails));
     }
 
+    /**
+     * Gets a bar by a id.
+     * @param ctx HTTP request information.
+     * @return a bar, otherwise a HTTP response 404.
+     */
     private Bar findBarById(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("id"));
         Bar bar = bars.get(id);
@@ -37,25 +42,42 @@ public class BarController {
         return bar;
     }
 
+    /**
+     * Retrieves data of all bars.
+     * @param ctx HTTP request information.
+     */
     public void getAll(Context ctx) {
-        ctx.json(bars);
+        ctx.status(200).json(bars);
     }
 
+    /**
+     * Retrieves data of a specific bar based on its id.
+     * @param ctx HTTP request
+     */
     public void getOne(Context ctx) {
         Bar bar = findBarById(ctx);
 
         if (bar != null) {
-            ctx.json(bar);
+            ctx.status(200).json(bar);
         }
     }
 
+    /**
+     * Retrieves cocktails of a specific bar based on its id.
+     * @param ctx HTTP request information.
+     */
     public void getBarCocktails(Context ctx){
         Bar bar = findBarById(ctx);
         if (bar != null) {
-            ctx.json(bar.getCocktails());
+            ctx.status(200).json(bar.getCocktails());
         }
     }
 
+    /**
+     * Modifies the cocktails list of a bar based on its id.
+     * @param ctx HTTP request information.
+     * @param isAdding true if we want to add a cocktail, false if we want to remove a cocktail.
+     */
     private void modifyBarCocktails(Context ctx, boolean isAdding){
         Bar bar = findBarById(ctx);
 
@@ -78,35 +100,91 @@ public class BarController {
                 bar.removeCocktail(cocktailName);
             }
 
-            ctx.json(bar.getCocktails());
+            ctx.status(200).json(bar.getCocktails());
         }
 
     }
 
+    /**
+     * Adds a cocktail to a bar based on its id.
+     * @param ctx HTTP request information.
+     */
     public void addBarCocktails(Context ctx){
         modifyBarCocktails(ctx, true);
     }
 
+    /**
+     * Removes a cocktail to a bar based on its id.
+     * @param ctx HTTP request information.
+     */
     public void removeBarCocktails(Context ctx){
         modifyBarCocktails(ctx, false);
     }
 
+    /**
+     * Creates a new bar.
+     * @param ctx HTTP request information.
+     */
     public void create(Context ctx) {
-        Bar bar = ctx.bodyAsClass(Bar.class);
-        bars.put(++lastId, bar);
+        Bar newBar = ctx.bodyAsClass(Bar.class);
+        bars.put(++lastId, new Bar(lastId, newBar.getName(), newBar.getCity(), newBar.getCapacity(), newBar.getCocktails()));
         ctx.status(201);
     }
 
+    /**
+     * Updates the properties of a specific bar.
+     * @param ctx HTTP request information.
+     */
     public void update(Context ctx) {
-        int id = Integer.parseInt(ctx.pathParam("id"));
-        Bar bar = ctx.bodyAsClass(Bar.class);
-        bars.put(id, bar);
-        ctx.status(200);
+        Bar currentBar = findBarById(ctx);
+
+        if(currentBar != null){
+            Bar updatedBar = ctx.bodyAsClass(Bar.class);
+            updateBarProperties(currentBar, updatedBar);
+
+            ctx.status(200).json(currentBar);
+        }
+        else {
+            ctx.status(404).result("Bar not found");
+        }
     }
 
+    /**
+     * Checks which fields must be updated, then proceed with updates.
+     * @param currentBar -
+     * @param updatedBar -
+     */
+    private void updateBarProperties(Bar currentBar, Bar updatedBar){
+        if(updatedBar.getName() != null){
+            currentBar.setName(updatedBar.getName());
+        }
+
+        if (updatedBar.getCity() != null) {
+            currentBar.setCity(updatedBar.getCity());
+        }
+
+        if(updatedBar.getCapacity() != 0){
+            currentBar.setCapacity(updatedBar.getCapacity());
+        }
+
+        if(updatedBar.getCocktails() != null){
+            currentBar.setCocktails(updatedBar.getCocktails());
+        }
+    }
+
+    /**
+     * Deletes a bar based on its id.
+     * @param ctx HTTP request information.
+     */
     public void delete(Context ctx) {
         int id = Integer.parseInt(ctx.pathParam("id"));
-        bars.remove(id);
-        ctx.status(204);
+
+        if(bars.get(id) != null){
+            bars.remove(id);
+            ctx.status(204);
+        }
+        else {
+            ctx.status(404).result("Bar can't be deleted because it doesn't exist.");
+        }
     }
 }
