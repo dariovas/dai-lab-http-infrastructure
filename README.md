@@ -29,7 +29,7 @@ The nginx.conf defines :
 The docker compose file will be used to generate our infrastructure.
 
 The compose.yaml defines :
-- The static web server to build
+- The services to build
 - On which port
 
 The file has been also documented with more information.
