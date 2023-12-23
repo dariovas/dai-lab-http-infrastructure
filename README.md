@@ -71,7 +71,9 @@ In this API, the following CRUD operations are possible :
   - DELETE /api/bars/{id} --> deletes a specific bar.
   - DELETE /api/bars/{id}/cocktails/del --> removes a cocktail from a specific bar.
 
-To be able to run it, you need to build the docker image based on the Dockerfile located in API-Server folder.
+Moreover, a [memo](./api-server/MEMO.md) containing an explanation of the different operations above has been written.
+
+Then, to be able to run it, you need to build the docker image based on the Dockerfile located in API-Server folder.
 ```
 docker build -t api-server .
 ```
