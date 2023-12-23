@@ -2,7 +2,14 @@
 ***
 
 ## Static Web Server
-The configuration files are included in the Dockerfile and the nginx.conf.
+A static web server has been deployed.
+
+It provides a static web site accessible thought this URL :
+http://localhost
+
+The configuration files can be found in the folder [staticWebServer](./staticWebServer).
+
+They include comments explaining the configuration lines in detail.
 
 ### Dockerfile
 The Dockerfile defines :
@@ -24,6 +31,23 @@ The docker compose file will be used to generate our infrastructure.
 The compose.yaml defines :
 - The static web server to build
 - On which port
+
+The file has been also documented with more information.
+
+The services can be started by using the following command :
+```
+docker compose up -d
+```
+
+Moreover, to additionally rebuild the images : 
+```
+docker compose up --build -d
+```
+
+Finaly, the services can be stopped by using the following command :
+```
+docker compose down
+```
 
 ## HTTP API Server
 An HTTP API Server to handle and manage different bars has been implemented.
@@ -52,7 +76,7 @@ To be able to run it, you need to build the docker image based on the Dockerfile
 docker build -t api-server .
 ```
 
-Then, runs the docker container based on this image.
+Then, runs the docker container.
 ```
 docker run --name api-server -d -p 7001:7001 api-server
 ```

@@ -9,16 +9,20 @@ public class Server {
 
         BarController barController = new BarController();
 
+        // Creates methods
+        app.post("/api/bars", barController::create);
+        app.post("/api/bars/{id}/cocktails/add", barController::addBarCocktails);
+
+        // Read methods
         app.get("/api/bars", barController::getAll);
         app.get("/api/bars/{id}", barController::getOne);
         app.get("/api/bars/{id}/cocktails", barController::getBarCocktails);
 
-        app.post("/api/bars", barController::create);
-        app.post("/api/bars/{id}/cocktails/add", barController::addBarCocktails);
-        app.delete("/api/bars/{id}/cocktails/del", barController::removeBarCocktails);
-
+        // Update method
         app.put("/api/bars/{id}", barController::update);
-        app.delete("/api/bars/{id}", barController::delete);
 
+        // Delete methods
+        app.delete("/api/bars/{id}/cocktails/del", barController::removeBarCocktails);
+        app.delete("/api/bars/{id}", barController::delete);
     }
 }

@@ -3,6 +3,9 @@ package ch.heig.dai.lab.http.api;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Implements a bar.
+ */
 public class Bar {
     private int id;
     private String name;
@@ -10,8 +13,19 @@ public class Bar {
     private int capacity;
     private List<String> cocktails;
 
+    /**
+     * Default constructor.
+     */
     public Bar(){}
 
+    /**
+     * Constructor of a bar.
+     * @param id -
+     * @param name -
+     * @param city -
+     * @param capacity -
+     * @param cocktails -
+     */
     public Bar(int id, String name, String city, int capacity, List<String> cocktails) {
         this.id = id;
         this.name = name;
@@ -23,6 +37,7 @@ public class Bar {
     public int getId(){
         return id;
     }
+
     public String getName() {
         return name;
     }
@@ -59,10 +74,18 @@ public class Bar {
         this.cocktails = new ArrayList<>(cocktails);
     }
 
+    /**
+     * Adds a cocktail to the bar.
+     * @param name cocktail name.
+     */
     public void addCocktail(String name){
         cocktails.add(name);
     }
 
+    /**
+     * Removes a cocktail from the bar.
+     * @param name cocktail name.
+     */
     public void removeCocktail(String name){
         cocktails.remove(name);
     }

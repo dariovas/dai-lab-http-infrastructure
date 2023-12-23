@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Manages the CRUD operations possible on the bars.
+ */
 public class BarController {
     private ConcurrentHashMap<Integer, Bar> bars = new ConcurrentHashMap<Integer, Bar>();
     private int lastId = 0;
