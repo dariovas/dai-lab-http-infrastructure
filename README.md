@@ -31,7 +31,7 @@ An HTTP API Server to handle and manage different bars has been implemented.
 It can be acceded on this URL :
 http://localhost:7001/api/bars
 
-All configuration files can be found in the folder api-server.
+All configuration files can be found in the folder [api-server](./api-server).
 
 In this API, the following CRUD operations are possible :
 - Create
