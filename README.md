@@ -4,7 +4,7 @@
 ## Static Web Server
 A static web server has been deployed.
 
-It provides a static web site accessible thought this URL :
+It provides a static website accessible through this URL :
 http://localhost
 
 The configuration files can be found in the folder [staticWebServer](./staticWebServer).
