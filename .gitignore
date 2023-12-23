@@ -16,7 +16,7 @@ target/
 *.iml
 *.ipr
 .idea/
-./staticWebServer/config/log
+./staticWebServer/config/log/*
 
 ### Eclipse ###
 .apt_generated
