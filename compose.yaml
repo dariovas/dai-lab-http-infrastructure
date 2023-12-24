@@ -34,6 +34,8 @@ services:
   reverse_proxy:
     container_name: reverse_proxy
     image: traefik
+    environment:
+      - TZ=Europe/Berlin
     command:
       # Enables the web UI and tells Traefik to listen to docker
       - "--api.insecure=true"
