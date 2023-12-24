@@ -34,8 +34,6 @@ services:
   reverse_proxy:
     container_name: reverse_proxy
     image: traefik
-    environment:
-      - TZ=Europe/Berlin
     command:
       # Enables the web UI and tells Traefik to listen to docker
       - "--api.insecure=true"
@@ -45,11 +43,14 @@ services:
       # Enables access logs
       - "--accesslog=true"
       - "--accesslog.filePath=/var/log/traefik/access.log"
+      - "--accesslog.fields.names.StartUTC=drop"
     ports:
       # The HTTP port
       - "80:80"
       # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"
+    environment:
+      - TZ=Europe/Zurich
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
