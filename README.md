@@ -98,7 +98,7 @@ Moreover, it hides the infrastructure details.
 ### How does it work 
 When a request is sent to the domain "localhost", it will be handled by the reverse proxy.
 
-It relays it to the router which is responsible for this domain.
+It relays the requests to the router which is responsible for this domain.
 Then, this same router relays the request to the correct service, for example to the API server.
 
 To configure this behavior, some rules have been implemented.
@@ -111,9 +111,7 @@ Then, on the service, the port on which the service responds to has been set.
 ### Dashboard Traefix
 Traefik provides a dashboard on which we can found the different routers and services configured.
 
-On a service, we can see on which IP it is linked.
-
-Moreover, we can monitor the status of the routes to the different services.
+It allows you to monitor and configure the services, the routes, the routage rules, and so on.
 
 It is accessible through this URL :
 http://localhost:8080/dashboard
