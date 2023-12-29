@@ -17,6 +17,7 @@ public class Server {
         app.get("/api/bars", barController::getAll);
         app.get("/api/bars/{id}", barController::getOne);
         app.get("/api/bars/{id}/cocktails", barController::getBarCocktails);
+        app.get("/api", barController::getRoot);
 
         // Update method
         app.put("/api/bars/{id}", barController::update);

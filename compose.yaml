@@ -26,7 +26,7 @@ services:
       # Explicitly tell traefik to expose this container.
       - "traefik.enable=true"
       # Defines the path prefixed domain on which the service responds.
-      - "traefik.http.routers.api-router.rule=PathPrefix(`/api/`)"
+      - "traefik.http.routers.api-router.rule=Host(`localhost`) && PathPrefix(`/api`)"
       # Routes all requests to the service api-router
       - "traefik.http.routers.api-router.service=api-service"
       # Defines the port on which the service responds.

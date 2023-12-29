@@ -46,6 +46,14 @@ public class BarController {
     }
 
     /**
+     * Displays the main page.
+     * @param ctx HTTP request information.
+     */
+    public void getRoot(Context ctx){
+        ctx.status(200).result("Bars API");
+    }
+
+    /**
      * Retrieves data of all bars.
      * @param ctx HTTP request information.
      */
