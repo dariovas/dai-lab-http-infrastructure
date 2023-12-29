@@ -10,7 +10,7 @@ services:
     labels:
       # Explicitly tell traefik to expose this container.
       - "traefik.enable=true"
-      # Defines the domain on which the service responds.
+      # Defines the domain to which the service responds.
       - "traefik.http.routers.staticWeb-router.rule=Host(`localhost`)"
       # Routes all requests to the service static-router.
       - "traefik.http.routers.staticWeb-router.service=staticWeb-service"
@@ -25,10 +25,14 @@ services:
     labels:
       # Explicitly tell traefik to expose this container.
       - "traefik.enable=true"
-      # Defines the path prefixed domain on which the service responds.
+      # Defines the path-prefixed domain to which the service responds.
       - "traefik.http.routers.api-router.rule=Host(`localhost`) && PathPrefix(`/api`)"
-      # Routes all requests to the service api-router
+      # Routes all requests to the service api-router.
       - "traefik.http.routers.api-router.service=api-service"
+      # Enables the sticky session for the api-service.
+      - "traefik.http.services.api-service.loadbalancer.sticky=true"
+      # Sets the cookie name to identify the session.
+      - "traefik.http.services.api-service.loadbalancer.sticky.cookie.name=apicookie"
       # Defines the port on which the service responds.
       - "traefik.http.services.api-service.loadbalancer.server.port=80"
     deploy:

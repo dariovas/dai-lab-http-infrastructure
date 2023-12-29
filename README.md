@@ -131,4 +131,37 @@ When the infrastructure is running, the number of instances can be adapted with 
 docker compose up --scale static_web_server=5 --scale api_server=2
 ```
 
+## Load balancing with round-robin and sticky sessions
+### Configuration
+To allow sticky sessions for the api-server, the following labels has been added to the compose.yaml file under the service api_server.
+```
+# Enables the sticky session for the api-service.
+- "traefik.http.services.api-service.loadbalancer.sticky=true"
+# Sets the cookie name to identify the session.
+- "traefik.http.services.api-service.loadbalancer.sticky.cookie.name=apicookie"
+```
 
+### Tests
+#### Static web server
+If we tried to access the static web server from a browser, Traefik does round-robin :
+```
+[29/Dec/2023:13:15:04 +0100] "GET / HTTP/1.1" 304 0 "-" "-" 14 "staticWeb-router@docker" "http://172.28.0.4:80" 1ms
+[29/Dec/2023:13:15:05 +0100] "GET / HTTP/1.1" 304 0 "-" "-" 17 "staticWeb-router@docker" "http://172.28.0.6:80" 0ms
+```
+So, the requests are redirected on different instances.
+
+#### API server
+If we tried to access the api-server from a browser in incognito mode and in standard mode, Traefik uses a sticky session :
+```
+Incognito mode :
+[29/Dec/2023:13:14:26 +0100] "GET /api/bars HTTP/1.1" 200 675 "-" "-" 2 "api-router@docker" "http://172.28.0.2:80" 115ms
+[29/Dec/2023:13:14:28 +0100] "GET /api/bars/1 HTTP/1.1" 200 161 "-" "-" 3 "api-router@docker" "http://172.28.0.2:80" 8ms
+[29/Dec/2023:13:14:31 +0100] "GET /api/bars HTTP/1.1" 200 675 "-" "-" 4 "api-router@docker" "http://172.28.0.2:80" 4ms
+
+Standard mode :
+[29/Dec/2023:13:18:24 +0100] "GET /api HTTP/1.1" 200 8 "-" "-" 24 "api-router@docker" "http://172.28.0.7:80" 78ms
+[29/Dec/2023:13:18:27 +0100] "GET /api/bars HTTP/1.1" 200 675 "-" "-" 25 "api-router@docker" "http://172.28.0.7:80" 119ms
+[29/Dec/2023:13:18:29 +0100] "GET /api/bars/1 HTTP/1.1" 200 161 "-" "-" 26 "api-router@docker" "http://172.28.0.7:80" 8ms
+```
+
+So, all requests from the same browser go to the same instance.
