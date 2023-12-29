@@ -3,7 +3,6 @@ version: '3'
 services:
   static_web_server:
     build: staticWebServer
-    container_name: static_web_server
     expose:
       - "80"
     volumes:
@@ -17,9 +16,10 @@ services:
       - "traefik.http.routers.staticWeb-router.service=staticWeb-service"
       # Defines the port on which the service responds.
       - "traefik.http.services.staticWeb-service.loadbalancer.server.port=80"
+    deploy:
+      replicas: 2
   api_server:
     build: api_server
-    container_name: api_server
     expose:
       - "80"
     labels:
@@ -31,6 +31,8 @@ services:
       - "traefik.http.routers.api-router.service=api-service"
       # Defines the port on which the service responds.
       - "traefik.http.services.api-service.loadbalancer.server.port=80"
+    deploy:
+      replicas: 3
   reverse_proxy:
     container_name: reverse_proxy
     image: traefik

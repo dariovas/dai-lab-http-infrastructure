@@ -83,12 +83,12 @@ Then, runs the docker container.
 docker run --name api-server -d -p 7001:7001 api-server
 ```
 
-## Reverse proxy
-A reverse proxy with traefik has been implemented in the infrastructure.
+## Reverse proxy with Traefik
+A reverse proxy with Traefik has been implemented in the infrastructure.
 
 The configuration can be found in the [compose.yaml file](./compose.yaml).
 
-It include comments explaining the configuration lines for traefik in detail.
+It includes comments explaining the configuration lines for traefik in detail.
 
 ### Why a reverse proxy is useful to improve the security of the infrastructure 
 A reverse proxy can hide the topology and characteristics of the back-end servers by removing the need to expose them direct to Internet.
@@ -108,14 +108,30 @@ Then, this same router relays the request to the correct service, for example to
 To configure this behavior, some rules have been implemented.
 
 All requests to localhost domain will go to the static web server, 
-but if we add the prefix "/api/", it will be forwarded to the API Server
+but if we add the prefix "/api", it will be forwarded to the API Server.
 
 Then, on the service, the port on which the service responds to has been set.
 
 ### Dashboard Traefix
 Traefik provides a dashboard on which we can found the different routers and services configured.
 
-It allows you to monitor and configure the services, the routes, the routage rules, and so on.
+It allows us to monitor and configure the services, the routes, the routage rules, and so on.
 
 It is accessible through this URL :
 http://localhost:8080/dashboard
+
+## Scalability and load balancing
+### Configuration
+To start multiple instances of the containers with docker compose, the deploy option has been defined under services in which the scalability is useful.
+
+The replicas parameter of the deploy option describes number of instances to be created when running "docker compose up".
+
+The configuration can be found in the [compose.yaml file](./compose.yaml).
+
+### How to dynamically update the number of instances
+When the infrastructure is running, the number of instances can be adapted with the docker compose command by specifying the option "--scale" followed by the service for which we need to increase or decrease the number of instances.
+```
+docker compose up --scale static_web_server=5 --scale api_server=2
+```
+
+
