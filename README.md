@@ -12,13 +12,13 @@ The configuration files can be found in the folder [staticWebServer](./staticWeb
 They include comments explaining the configuration lines in detail.
 
 ### Dockerfile
-The Dockerfile defines :
+The `Dockerfile` defines :
 - Which image to use
 - Website content and nginx configuration to copy
 - Which port to expose for the external connection
 
 ### nginx.conf
-The nginx.conf defines :
+The `nginx.conf` defines :
 - Maximum connection to handle by worker
 - Which port to listen and on which hostname
 - Location of the website content to display
@@ -44,7 +44,7 @@ Moreover, to additionally rebuild the images :
 docker compose up --build -d
 ```
 
-Finaly, the services can be stopped by using the following command :
+Finally, the services can be stopped by using the following command :
 ```
 docker compose down
 ```
@@ -59,17 +59,17 @@ All configuration files can be found in the folder [api-server](./api-server).
 
 In this API, the following CRUD operations are possible :
 - Create
-  - POST /api/bars --> creates a new bar.
-  - POST /api/bars/{id}/cocktails/add --> adds a new cocktail to a specific bar.
+  - `POST /api/bars` --> creates a new bar.
+  - `POST /api/bars/{id}/cocktails/add` --> adds a new cocktail to a specific bar.
 - Read
-  - GET /api/bars --> displays all bars.
-  - GET /api/bars/{id} --> displays a specific bar.
-  - GET /api/bars/{id}/cocktails --> displays a specific bar cocktails list.
+  - `GET /api/bars` --> displays all bars.
+  - `GET /api/bars/{id}` --> displays a specific bar.
+  - `GET /api/bars/{id}/cocktails` --> displays a specific bar cocktails list.
 - Update
-  - PUT /api/bars/{id} --> updates the properties of a specific bar. The following properties are modifiable : name, city, capacity and cocktails list (it is not mandatory to modify all properties at once).
+  - `PUT /api/bars/{id}` --> updates the properties of a specific bar. The following properties are modifiable : name, city, capacity and cocktails list (it is not mandatory to modify all properties at once).
 - Delete
-  - DELETE /api/bars/{id} --> deletes a specific bar.
-  - DELETE /api/bars/{id}/cocktails/del --> removes a cocktail from a specific bar.
+  - `DELETE /api/bars/{id}` --> deletes a specific bar.
+  - `DELETE /api/bars/{id}/cocktails/del` --> removes a cocktail from a specific bar.
 
 Moreover, a [memo](./api-server/MEMO.md) containing an explanation of the different operations above has been written.
 
@@ -104,20 +104,20 @@ Moreover, it can also ensure that multiple servers can be accessed through the s
 ### Dashboard Traefix
 Traefik provides a dashboard on which we can found the different routers and services configured.
 
-It allows us to monitor and configure the services, the routes, the routage rules, and so on.
+It allows us to monitor the services, the routes, the routage rules, and so on.
 
 It is accessible through this URL :
 http://localhost:8080/dashboard
 
 ## Scalability and load balancing
 ### Configuration
-To start multiple instances of the containers with docker compose, the deploy option has been defined under services in which the scalability is useful.
+To start multiple instances of the containers with docker compose, the `deploy` option has been defined under services in which the scalability is useful.
 
-The replicas parameter of the deploy option describes number of instances to be created when running "docker compose up".
+The `replicas` parameter of the deploy option describes number of instances to be created when running "docker compose up".
 
 The configuration can be found in the [compose.yaml file](./compose.yaml).
 
-To see if it is working, you can check the access.log file mounted locally in the reverse_proxy folder, then you can see that the reverse proxy redirects the requests on different instances :
+To see if it works, you can check the access.log file mounted locally in the reverse_proxy folder, then you can see that the reverse proxy redirects the requests on different instances :
 ```
 [29/Dec/2023:13:05:48 +0100] "GET / HTTP/1.1" 304 0 "-" "-" 1 "staticWeb-router@docker" "http://172.27.0.7:80" 2ms
 [29/Dec/2023:13:05:52 +0100] "GET /api/bars HTTP/1.1" 200 675 "-" "-" 2 "api-router@docker" "http://172.27.0.6:80" 146ms
@@ -165,3 +165,4 @@ Standard mode :
 ```
 
 So, all requests from the same browser go to the same instance.
+
