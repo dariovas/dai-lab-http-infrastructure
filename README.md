@@ -99,19 +99,6 @@ Another important point, it is also a good place to monitor and log what is goin
 
 Moreover, it can also ensures that multiple servers can be accessed through the same URL. 
 
-### How does it work 
-When a request is sent to the domain "localhost", it will be handled by the reverse proxy.
-
-It relays the requests to the router which is responsible for this domain.
-Then, this same router relays the request to the correct service, for example to the API server.
-
-To configure this behavior, some rules have been implemented.
-
-All requests to localhost domain will go to the static web server, 
-but if we add the prefix "/api", it will be forwarded to the API Server.
-
-Then, on the service, the port on which the service responds to has been set.
-
 ### Dashboard Traefix
 Traefik provides a dashboard on which we can found the different routers and services configured.
 
