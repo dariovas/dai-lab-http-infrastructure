@@ -139,7 +139,7 @@ The steps to follow for this section are thus:
 - [x] You are able to explain in the documentation how you have implemented the solution and walk us through the configuration and the code.
 - [x] You are able to explain in the documentation why a reverse proxy is useful to improve the security of the infrastructure.
 - [x] You are able to explain in the documentation how to access the dashboard of Traefik and how it works.
-- [ ] You have **documented** your configuration in your report.
+- [x] You have **documented** your configuration in your report.
 
 
 Step 5: Scalability and load balancing

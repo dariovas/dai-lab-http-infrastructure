@@ -90,10 +90,14 @@ The configuration can be found in the [compose.yaml file](./compose.yaml).
 
 It include comments explaining the configuration lines for traefik in detail.
 
-### Why use a reverse proxy 
-A reverse proxy allows us to avoid exposing our web servers directly to the Internet.
+### Why a reverse proxy is useful to improve the security of the infrastructure 
+A reverse proxy can hide the topology and characteristics of the back-end servers by removing the need to expose them direct to Internet.
 
-Moreover, it hides the infrastructure details.
+So, by intercepting requests for the backend servers, a reverse proxy protects their identities and acts as a security layer in more against the malicious people.
+
+Another important point, it is also a good place to monitor and log what is going to the backend servers.
+
+Moreover, it can also ensures that multiple servers can be accessed through the same URL. 
 
 ### How does it work 
 When a request is sent to the domain "localhost", it will be handled by the reverse proxy.
@@ -103,7 +107,7 @@ Then, this same router relays the request to the correct service, for example to
 
 To configure this behavior, some rules have been implemented.
 
-All requests to locahost domain will go to the static web server, 
+All requests to localhost domain will go to the static web server, 
 but if we add the prefix "/api/", it will be forwarded to the API Server
 
 Then, on the service, the port on which the service responds to has been set.
