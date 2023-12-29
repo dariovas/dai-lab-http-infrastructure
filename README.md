@@ -80,7 +80,7 @@ docker build -t api-server .
 
 Then, runs the docker container.
 ```
-docker run --name api-server -d -p 7001:7001 api-server
+docker run --name api-server -d -p 80:80 api-server
 ```
 
 ## Reverse proxy with Traefik
