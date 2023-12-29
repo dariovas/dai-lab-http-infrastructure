@@ -66,7 +66,8 @@ In this API, the following CRUD operations are possible :
   - `GET /api/bars/{id}` --> displays a specific bar.
   - `GET /api/bars/{id}/cocktails` --> displays a specific bar cocktails list.
 - Update
-  - `PUT /api/bars/{id}` --> updates the properties of a specific bar. The following properties are modifiable : name, city, capacity and cocktails list (it is not mandatory to modify all properties at once).
+  - `PUT /api/bars/{id}` --> updates the properties of a specific bar.  
+    The following properties are modifiable : name, city, capacity and cocktails list (it is not mandatory to modify all properties at once).
 - Delete
   - `DELETE /api/bars/{id}` --> deletes a specific bar.
   - `DELETE /api/bars/{id}/cocktails/del` --> removes a cocktail from a specific bar.
@@ -113,7 +114,7 @@ http://localhost:8080/dashboard
 ### Configuration
 To start multiple instances of the containers with docker compose, the `deploy` option has been defined under services in which the scalability is useful.
 
-The `replicas` parameter of the deploy option describes number of instances to be created when running "docker compose up".
+The `replicas` parameter of the `deploy` option describes number of instances to be created when running "docker compose up".
 
 The configuration can be found in the [compose.yaml file](./compose.yaml).
 
