@@ -85,13 +85,25 @@ docker run --name api-server -d -p 80:80 api-server
 ```
 
 ## Reverse proxy with Traefik
-A reverse proxy with Traefik has been implemented in the infrastructure.
+### Configuration
+To configure a reverse proxy in the infrastructure, a new service called `reverse_proxy` has been added.
+
+In this one, we've configured the Traefix image and defined that it should listen to docker.
+We've also added an access log to see which service is responding to HTTP requests.
+
+Then, on the remaining two services `static_web_server` and `api_server`, we configured labels used by Traefik to know where and how the requests must be routed.
+
+Below, the configuration applied to the `api_server` which is the same like the `static_web_server`, but we defined the domain "localhost" without the path-prefixed.
+```
+# Defines the path-prefixed domain to which the service responds.
+- "traefik.http.routers.api-router.rule=Host(`localhost`) && PathPrefix(`/api`)"
+# Routes all requests to the service api-service.
+- "traefik.http.routers.api-router.service=api-service"
+# Defines the port on which the service responds.
+- "traefik.http.services.api-service.loadbalancer.server.port=80"
+```
 
 The configuration can be found in the [compose.yaml file](./compose.yaml).
-
-It includes comments explaining the configuration lines for traefik in detail.
-
-We also configured access log to see which service respond to the requests.
 
 ### Why a reverse proxy is useful to improve the security of the infrastructure 
 A reverse proxy can hide the topology and characteristics of the back-end servers by removing the need to expose them direct to Internet.

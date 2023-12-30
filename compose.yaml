@@ -27,7 +27,7 @@ services:
       - "traefik.enable=true"
       # Defines the path-prefixed domain to which the service responds.
       - "traefik.http.routers.api-router.rule=Host(`localhost`) && PathPrefix(`/api`)"
-      # Routes all requests to the service api-router.
+      # Routes all requests to the service api-service.
       - "traefik.http.routers.api-router.service=api-service"
       # Enables the sticky session for the api-service.
       - "traefik.http.services.api-service.loadbalancer.sticky=true"
