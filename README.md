@@ -154,7 +154,7 @@ To allow sticky sessions for the api-server, the following labels has been added
 - "traefik.http.services.api-service.loadbalancer.sticky.cookie.name=apicookie"
 ```
 
-### Tests
+### Testing
 #### Static web server
 If we tried to access the static web server from a browser, Traefik does round-robin :
 ```
@@ -186,6 +186,36 @@ First, two certificates were generated using the openssl tool, which allows us t
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -nodes -subj "/C=CH/ST=VD/L=Yverdon/O=HEIG/OU=HEIG/CN=localhost"
 ```
 
+Then, these certificates must be in a folder called **certificates** located in the reverse_proxy folder.
 
+### Traefik configuration file
+To be able to securing Traefik with HTTPS, a file named [traefik.yaml](./reverse_proxy/traefik.yaml) has been created.
 
+In this file, firstly, we have two sections called `api` and `providers` to enable the dashboard Traefix and to define the environment with which Traefik must communicate.
 
+Then, we added two entrypoints to define on which input point traefik should listen.
+In this case, we will have one for HTTP requests called `web` and another one for HTTPS requests called `websecure`.
+```
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+```
+Moreover, a section called `tls` has been added to define the certificates.
+```
+tls:
+  certificates:
+    - certFile: /etc/traefik/certificates/cert.pem
+      keyFile: /etc/traefik/certificates/key.pem
+```
+
+### Activating the HTTPS entrypoint for the servers
+Finally, to activate the HTTPS entrypoint for the static web server and the API server, one label has been added to define the entrypoint on which the router listen to and one another label to activate the tls on the router.
+```
+- "traefik.http.routers.staticWeb-router.entrypoints=websecure"
+- "traefik.http.routers.staticWeb-router.tls=true"
+```
+
+### Testing
+If we tried to access both servers from a browser, we can see that they are accessible only through HTTPS.
