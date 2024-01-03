@@ -5,7 +5,7 @@
 A static web server has been deployed.
 
 It provides a static website accessible through this URL :
-http://localhost
+https://localhost
 
 The configuration files can be found in the folder [staticWebServer](./staticWebServer).
 
@@ -30,7 +30,7 @@ The docker compose file will be used to generate our infrastructure.
 
 The compose.yaml defines :
 - The services to build
-- On which port
+- The labels for the Traefik configuration
 
 The file has been also documented with more information.
 
@@ -53,7 +53,7 @@ docker compose down
 An HTTP API Server to handle and manage different bars has been implemented.
 
 It can be acceded on this URL :
-http://localhost/api/bars
+https://localhost/api/bars
 
 All configuration files can be found in the folder [api-server](./api-server).
 
