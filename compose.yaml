@@ -60,7 +60,7 @@ services:
     environment:
       - TZ=Europe/Zurich
     volumes:
-      # So that Traefik can listen to the Docker events
+      # So that Traefik can listen to the Docker events.
       - /var/run/docker.sock:/var/run/docker.sock
       # Mounts a local volume to have access to the logs.
       - ./reverse_proxy/log:/var/log/traefik/
@@ -68,3 +68,14 @@ services:
       - ./reverse_proxy/certificates:/etc/traefik/certificates
       # Mounts the Traefik configuration file to the container.
       - ./reverse_proxy/traefik.yaml:/etc/traefik/traefik.yaml
+  management_ui:
+    image: portainer/portainer-ce
+    container_name: management_ui
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      # Adds access to the containers.
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Stores the portainer data.
+      - ./management_ui/portainer_data:/data
