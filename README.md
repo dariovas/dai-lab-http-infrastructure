@@ -219,3 +219,9 @@ Finally, to activate the HTTPS entrypoint for the static web server and the API 
 
 ### Testing
 If we tried to access both servers from a browser, we can see that they are accessible only through HTTPS.
+
+## Management UI
+The tool `portainer` has been deployed to manage the docker infrastructure.
+
+It can be accessible through the URL : http://localhost:9000
+
