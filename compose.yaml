@@ -78,4 +78,7 @@ services:
       # Adds access to the containers.
       - /var/run/docker.sock:/var/run/docker.sock
       # Stores the portainer data.
-      - ./management_ui/portainer_data:/data
+      - portainer_data:/data
+volumes:
+  # Mounts a volume to store the portainer_data in docker.
+  portainer_data:
