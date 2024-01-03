@@ -3,8 +3,6 @@ version: '3'
 services:
   static_web_server:
     build: staticWebServer
-    expose:
-      - "80"
     volumes:
       - ./staticWebServer/config/log:/var/log/nginx
     labels:
@@ -12,6 +10,10 @@ services:
       - "traefik.enable=true"
       # Defines the domain to which the service responds.
       - "traefik.http.routers.staticWeb-router.rule=Host(`localhost`)"
+      # Defines the entrypoint to which the router listen to.
+      - "traefik.http.routers.staticWeb-router.entrypoints=websecure"
+      # Enables the tls.
+      - "traefik.http.routers.staticWeb-router.tls=true"
       # Routes all requests to the service static-router.
       - "traefik.http.routers.staticWeb-router.service=staticWeb-service"
       # Defines the port on which the service responds.
@@ -20,19 +22,22 @@ services:
       replicas: 2
   api_server:
     build: api_server
-    expose:
-      - "80"
     labels:
       # Explicitly tell traefik to expose this container.
       - "traefik.enable=true"
       # Defines the path-prefixed domain to which the service responds.
       - "traefik.http.routers.api-router.rule=Host(`localhost`) && PathPrefix(`/api`)"
+      # Defines the entrypoint to which the router listen to.
+      - "traefik.http.routers.api-router.entrypoints=websecure"
+      # Enables the tls.
+      - "traefik.http.routers.api-router.tls=true"
       # Routes all requests to the service api-service.
       - "traefik.http.routers.api-router.service=api-service"
       # Enables the sticky session for the api-service.
       - "traefik.http.services.api-service.loadbalancer.sticky=true"
-      # Sets the cookie name to identify the session.
+      # Sets the cookie name to identify the session and enables the security on it.
       - "traefik.http.services.api-service.loadbalancer.sticky.cookie.name=apicookie"
+      - "traefik.http.services.api-service.loadbalancer.sticky.cookie.secure=true"
       # Defines the port on which the service responds.
       - "traefik.http.services.api-service.loadbalancer.server.port=80"
     deploy:
@@ -41,18 +46,15 @@ services:
     container_name: reverse_proxy
     image: traefik
     command:
-      # Enables the web UI and tells Traefik to listen to docker
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      # Do not expose containers unless explicitly told so
-      - "--providers.docker.exposedbydefault=false"
+      # Uses the configuration file.
+      - "--configFile=/etc/traefik/traefik.yaml"
       # Enables access logs
       - "--accesslog=true"
       - "--accesslog.filePath=/var/log/traefik/access.log"
       - "--accesslog.fields.names.StartUTC=drop"
     ports:
-      # The HTTP port
-      - "80:80"
+      # Exposes the HTTPS port
+      - "443:443"
       # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"
     environment:
@@ -62,3 +64,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       # Mounts a local volume to have access to the logs.
       - ./reverse_proxy/log:/var/log/traefik/
+      # Mounts the certificates directory to the container.
+      - ./reverse_proxy/certificates:/etc/traefik/certificates
+      # Mounts the Traefik configuration file to the container.
+      - ./reverse_proxy/traefik.yaml:/etc/traefik/traefik.yaml

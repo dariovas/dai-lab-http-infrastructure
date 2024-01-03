@@ -179,3 +179,13 @@ Standard mode :
 
 So, all requests from the same browser go to the same instance.
 
+## Securing Traefik with HTTPS
+### Certificates generation
+First, two certificates were generated using the openssl tool, which allows us to generate a self-signed certificate and its associated private key.
+```
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -nodes -subj "/C=CH/ST=VD/L=Yverdon/O=HEIG/OU=HEIG/CN=localhost"
+```
+
+
+
+
