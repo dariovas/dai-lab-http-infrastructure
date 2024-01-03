@@ -42,5 +42,8 @@ build/
 ### Mac OS ###
 .DS_Store
 
-### Ignore log files ###
+### Ignores log files ###
 *.log
+
+### Ignores certfificates files ###
+*.pem
