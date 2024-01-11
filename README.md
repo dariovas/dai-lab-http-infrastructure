@@ -233,3 +233,6 @@ This service has been added in the docker compose file.
 It can be accessible through the URL : http://localhost:9000
 
 ## Optional step 2: Integration API - static Web site
+A new section has been added in which we displayed the existing bar names.
+
+It can be found at the end of the static Web site.

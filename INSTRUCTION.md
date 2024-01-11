@@ -275,7 +275,7 @@ The modern way to make such requests is to use the [JavaScript Fetch API](https:
 
 ### Acceptance criteria
 
-- [ ] You have added JavaScript code to your static Web page to make at least a GET request to the API server.
-- [ ] You can do a demo where you show that the API is called and the result is displayed on the page.
-- [ ] You have **documented** your implementation in your report.
+- [x] You have added JavaScript code to your static Web page to make at least a GET request to the API server.
+- [x] You can do a demo where you show that the API is called and the result is displayed on the page.
+- [x] You have **documented** your implementation in your report.
 

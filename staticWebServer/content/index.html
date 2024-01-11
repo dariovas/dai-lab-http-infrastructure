@@ -182,6 +182,15 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-15 mb-8 mb-md-1">
+                        <div class="card py-4 h-100">
+                            <div class="card-body text-center">
+                            <h4 class="text-uppercase m-0">Bar Names</h4>
+                            <hr class="my-4 mx-auto" />
+                            <div class="small text-black-50" id="barsRow"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="social d-flex justify-content-center">
                     <a class="mx-2" href="#!"><i class="fab fa-twitter"></i></a>
@@ -201,5 +210,21 @@
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <script>
+            let url = "/api/bars"
+
+            fetch(url)
+                .then(res => {
+                    return res.json();
+                })
+                .then(data => {
+                    Object.values(data).forEach(member => {
+                        let newDiv = document.createElement("div");
+                        newDiv.innerText = member.name;
+                        document.getElementById("barsRow").appendChild(newDiv);
+                    })
+                })
+                .catch(error => console.error(error));
+        </script>
     </body>
 </html>
