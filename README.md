@@ -220,8 +220,16 @@ Finally, to activate the HTTPS entrypoint for the static web server and the API 
 ### Testing
 If we tried to access both servers from a browser, we can see that they are accessible only through HTTPS.
 
-## Management UI
-The tool `portainer` has been deployed to manage the docker infrastructure.
+## Optional step 1: Management UI
+In our infrastructure, we have chosen to deploy `Portainer`.
+
+`Portainer` is a web interface which allows us to easily manage a docker environment.
+
+The official documentation of the tool can be found under :
+https://docs.portainer.io/
+
+This service has been added in the docker compose file.
 
 It can be accessible through the URL : http://localhost:9000
 
+## Optional step 2: Integration API - static Web site
