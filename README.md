@@ -235,4 +235,15 @@ It can be accessible through the URL : http://localhost:9000
 ## Optional step 2: Integration API - static Web site
 A new section has been added in which we displayed the existing bar names.
 
-It can be found at the end of the static Web site.
+It can be found at the bottom of the static website, below the contact information.
+
+To add this, we make an API call. To do this we use JavaScript.
+
+We add the scripts.jss file to the HTML file to display the information.
+``` HTML
+  <script src="js/scripts.js"></script>
+```
+
+In this script we have a function.
+
+This will call the API and display the result on the website.
