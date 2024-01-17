@@ -239,11 +239,25 @@ It can be found at the bottom of the static website, below the contact informati
 
 To add this, we make an API call. To do this we use JavaScript.
 
-We add the scripts.jss file to the HTML file to display the information.
-``` HTML
-  <script src="js/scripts.js"></script>
-```
+This is integrated directly into the HTML page
 
-In this script we have a function.
+``` HTML
+  <script>
+            let url = "/api/bars"
+
+            fetch(url)
+                .then(res => {
+                    return res.json();
+                })
+                .then(data => {
+                    Object.values(data).forEach(member => {
+                        let newDiv = document.createElement("div");
+                        newDiv.innerText = member.name;
+                        document.getElementById("barsRow").appendChild(newDiv);
+                    })
+                })
+                .catch(error => console.error(error));
+        </script>
+```
 
 This will call the API and display the result on the website.
