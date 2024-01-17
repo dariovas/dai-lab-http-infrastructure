@@ -277,7 +277,7 @@ It can be found at the bottom of the static website, below the contact informati
 
 To add this, we make an API call. To do this we use JavaScript.
 
-This is integrated directly into the HTML page
+This is integrated directly into the HTML page.
 
 It will run a GET request to the dynamic server to get all the bars, then it will display them in the section of the index.html file containing the id `barsRow`.
 ```
