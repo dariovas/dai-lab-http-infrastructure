@@ -7,7 +7,7 @@ A static web server has been deployed.
 It provides a static website accessible through this URL :
 https://localhost
 
-The configuration files can be found in the folder [staticWebServer](./staticWebServer).
+The configuration files can be found in the folder [staticWebServer](./static_web_server).
 
 They include comments explaining the configuration lines in detail.
 

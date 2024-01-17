@@ -2,16 +2,17 @@ version: '3'
 
 services:
   static_web_server:
-    build: staticWebServer
+    build: static_web_server
+    expose:
+      - "80"
+      - "443"
     volumes:
-      - ./staticWebServer/config/log:/var/log/nginx
+      - ./static_web_server/config/log:/var/log/nginx
     labels:
       # Explicitly tell traefik to expose this container.
       - "traefik.enable=true"
       # Defines the domain to which the service responds.
       - "traefik.http.routers.staticWeb-router.rule=Host(`localhost`)"
-      # Defines the entrypoint to which the router listen to.
-      - "traefik.http.routers.staticWeb-router.entrypoints=websecure"
       # Enables the tls.
       - "traefik.http.routers.staticWeb-router.tls=true"
       # Routes all requests to the service static-router.
@@ -22,13 +23,14 @@ services:
       replicas: 2
   api_server:
     build: api_server
+    expose:
+      - "80"
+      - "443"
     labels:
       # Explicitly tell traefik to expose this container.
       - "traefik.enable=true"
       # Defines the path-prefixed domain to which the service responds.
       - "traefik.http.routers.api-router.rule=Host(`localhost`) && PathPrefix(`/api`)"
-      # Defines the entrypoint to which the router listen to.
-      - "traefik.http.routers.api-router.entrypoints=websecure"
       # Enables the tls.
       - "traefik.http.routers.api-router.tls=true"
       # Routes all requests to the service api-service.
@@ -48,12 +50,9 @@ services:
     command:
       # Uses the configuration file.
       - "--configFile=/etc/traefik/traefik.yaml"
-      # Enables access logs
-      - "--accesslog=true"
-      - "--accesslog.filePath=/var/log/traefik/access.log"
-      - "--accesslog.fields.names.StartUTC=drop"
     ports:
-      # Exposes the HTTPS port
+      # Exposes the HTTP and HTTPS ports
+      - "80:80"
       - "443:443"
       # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"
