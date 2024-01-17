@@ -1,34 +1,58 @@
 # DAI lab: HTTP Infrastructure
 ***
 
-## Static Web Server
-A static web server has been deployed.
+## Step 1: Static Web site
+The first step was to configure NGINX in a container to be able to run a static web site.
 
-It provides a static website accessible through this URL :
+The configuration files can be found in the folder [static_web_server](./static_web_server).
+
+As content for our static site, the template site Grayscale from [Start Bootstrap](https://startbootstrap.com/themes) has been chosen.
+
+In the Dockerfile, we specified the NGINX image, the nginx configuration and the site content to copy in the container and the port to expose.
+```
+FROM nginx
+COPY config /etc/nginx
+COPY content /usr/share/nginx/html
+EXPOSE 80
+```
+
+Below is the nginx.conf file with comments explaining each line :
+```
+http {
+    server{
+        # Tells NGINX hostname/IP and the TCP port where it should listen for HTTP connection.
+        listen 80;
+        server_name localhost;
+
+        # Helps provide a hint as to how the content should be processed and displayed.
+        include /etc/nginx/mime.types;
+
+        # Location of website files
+        location / {
+            root /usr/share/nginx/html;
+            index index.html;
+        }
+
+        # Configures logging.
+        error_log  /var/log/nginx/error.log warn;
+        access_log  /var/log/nginx/access.log;
+
+        # Custom error pages for following codes
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   /usr/share/nginx/html;
+        }
+    }
+}
+```
+
+The static website is accessible through this URL :
 https://localhost
 
-The configuration files can be found in the folder [staticWebServer](./static_web_server).
-
-They include comments explaining the configuration lines in detail.
-
-### Dockerfile
-The `Dockerfile` defines :
-- Which image to use
-- Website content and nginx configuration to copy
-- Which port to expose for the external connection
-
-### nginx.conf
-The `nginx.conf` defines :
-- Maximum connection to handle by worker
-- Which port to listen and on which hostname
-- Location of the website content to display
-- Default page 
-- Custom error pages
-
-## Docker Compose 
+## Step 2: Docker compose
 The docker compose file will be used to generate our infrastructure.
 
-The compose.yaml defines :
+The [compose.yaml](./compose.yaml). defines :
 - The services to build
 - The labels for the Traefik configuration
 
@@ -55,7 +79,7 @@ An HTTP API Server to handle and manage different bars has been implemented.
 It can be acceded on this URL :
 https://localhost/api/bars
 
-All configuration files can be found in the folder [api-server](./api-server).
+All configuration files can be found in the folder [api_server](./api_server).
 
 In this API, the following CRUD operations are possible :
 - Create
@@ -72,7 +96,7 @@ In this API, the following CRUD operations are possible :
   - `DELETE /api/bars/{id}` --> deletes a specific bar.
   - `DELETE /api/bars/{id}/cocktails/del` --> removes a cocktail from a specific bar.
 
-Moreover, a [memo](./api-server/MEMO.md) containing an explanation of the different operations above has been written.
+Moreover, a [memo](./api_server/doc/MEMO.md) containing an explanation of the different operations above has been written.
 
 Then, to be able to run it, you need to build the docker image based on the Dockerfile located in API-Server folder.
 ```
@@ -84,7 +108,9 @@ Then, runs the docker container.
 docker run --name api-server -d -p 80:80 api-server
 ```
 
-## Reverse proxy with Traefik
+It has been also included in the docker compose file.
+
+## Step 4: Reverse proxy with Traefik
 ### Configuration
 To configure a reverse proxy in the infrastructure, a new service called `reverse_proxy` has been added.
 
@@ -122,11 +148,15 @@ It allows us to monitor the services, the routes, the routage rules, and so on.
 It is accessible through this URL :
 http://localhost:8080/dashboard
 
-## Scalability and load balancing
+## Step 5: Scalability and load balancing
 ### Configuration
 To start multiple instances of the containers with docker compose, the `deploy` option has been defined under services in which the scalability is useful.
 
 The `replicas` parameter of the `deploy` option describes number of instances to be created when running "docker compose up".
+```
+deploy:
+replicas: 3
+```
 
 The configuration can be found in the [compose.yaml file](./compose.yaml).
 
@@ -144,14 +174,15 @@ When the infrastructure is running, the number of instances can be adapted with 
 docker compose up --scale static_web_server=5 --scale api_server=2
 ```
 
-## Load balancing with round-robin and sticky sessions
+## Step 6: Load balancing with round-robin and sticky sessions
 ### Configuration
 To allow sticky sessions for the api-server, the following labels has been added to the compose.yaml file under the service api_server.
 ```
 # Enables the sticky session for the api-service.
 - "traefik.http.services.api-service.loadbalancer.sticky=true"
-# Sets the cookie name to identify the session.
+# Sets the cookie name to identify the session and enables the security on it.
 - "traefik.http.services.api-service.loadbalancer.sticky.cookie.name=apicookie"
+- "traefik.http.services.api-service.loadbalancer.sticky.cookie.secure=true"
 ```
 
 ### Testing
@@ -179,7 +210,7 @@ Standard mode :
 
 So, all requests from the same browser go to the same instance.
 
-## Securing Traefik with HTTPS
+## Step 7: Securing Traefik with HTTPS
 ### Certificates generation
 First, two certificates were generated using the openssl tool, which allows us to generate a self-signed certificate and its associated private key.
 ```
@@ -195,10 +226,17 @@ In this file, firstly, we have two sections called `api` and `providers` to enab
 
 Then, we added two entrypoints to define on which input point traefik should listen.
 In this case, we will have one for HTTP requests called `web` and another one for HTTPS requests called `websecure`.
+Moreover, we will redirect all request on the port 80 to the port 443.
 ```
 entryPoints:
   web:
     address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
   websecure:
     address: ":443"
 ```
@@ -241,6 +279,14 @@ To add this, we make an API call. To do this we use JavaScript.
 
 This is integrated directly into the HTML page
 
+It will run a GET request to the dynamic server to get all the bars, then it will display them in the section of the index.html file containing the id `barsRow`.
+```
+<div class="card py-4 h-100">
+<div class="card-body text-center">
+<h4 class="text-uppercase m-0">Bar Names</h4>
+<hr class="my-4 mx-auto" />
+<div class="small text-black-50" id="barsRow"></div>
+```
 ``` HTML
   <script>
             let url = "/api/bars"
@@ -259,5 +305,3 @@ This is integrated directly into the HTML page
                 .catch(error => console.error(error));
         </script>
 ```
-
-This will call the API and display the result on the website.
